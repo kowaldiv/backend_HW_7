@@ -142,4 +142,29 @@ app.patch(
   },
 );
 
+app.delete(
+  "/tasks/:id",
+  {
+    preHandler: [app.validate({ params: taskParamsSchema })],
+  },
+  async (request, reply) => {
+    const { id } = request.params;
+
+    const existingTask = tasks.get(id);
+
+    if (!existingTask) {
+      return reply.status(404).send({
+        error: "Not Found",
+        message: `Task with id ${id} does not exist`,
+      });
+    }
+
+    tasks.delete(id);
+
+    return reply
+      .status(200)
+      .send({ message: `Task with id ${id} has been deleted` });
+  },
+);
+
 app.listen({ port: 3000 });
