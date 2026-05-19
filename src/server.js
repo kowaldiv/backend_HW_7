@@ -15,8 +15,15 @@ import { createTaskRepository } from "./tasks/task.repository.js";
 import { createTaskService } from "./tasks/task.service.js";
 import { createTaskController } from "./tasks/task.controller.js";
 import { registerTaskRoutes } from "./tasks/task.routes.js";
+import { createTaskFileRepository } from "./tasks/task.repository.file.js";
 
-const repository = createTaskRepository();
+const STORAGE_TYPE = process.env.STORAGE_TYPE || "memory";
+
+const repository =
+  STORAGE_TYPE === "file"
+    ? createTaskFileRepository({ filePath: "./src/data/tasks.json" })
+    : createTaskRepository();
+
 const taskService = createTaskService({ taskRepository: repository });
 const taskController = createTaskController({ taskService });
 

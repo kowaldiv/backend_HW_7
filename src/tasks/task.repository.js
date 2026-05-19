@@ -56,12 +56,12 @@ export function createTaskRepository() {
     const existingTask = tasks.get(id);
 
     if (!existingTask) {
-      return null;
+      return false;
     }
 
     tasks.delete(id);
 
-    return `Task with id ${id} has been deleted`;
+    return true;
   };
 
   return {
